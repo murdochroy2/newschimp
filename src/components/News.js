@@ -152,23 +152,59 @@ const News = (props) => {
   };
   return (
     <>
-      <h1 className='text-center my-2'>NewsChimp - Top Headlines from {capitalizeFirstLetter(props.category)}</h1>
+      {/* Hero Header */}
+      <div style={{
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #0f172a 100%)',
+        padding: '3rem 1.5rem 2rem',
+        textAlign: 'center',
+        borderBottom: '1px solid rgba(99,102,241,0.15)'
+      }}>
+        <span style={{
+          display: 'inline-block', padding: '4px 14px', borderRadius: '20px',
+          background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)',
+          color: '#a5b4fc', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.08em',
+          textTransform: 'uppercase', marginBottom: '0.75rem'
+        }}>📰 {capitalizeFirstLetter(props.category)}</span>
+        <h1 style={{
+          fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800,
+          background: 'linear-gradient(135deg, #f1f5f9 0%, #a5b4fc 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+          margin: '0 0 0.5rem', lineHeight: 1.2
+        }}>Top Headlines</h1>
+        <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0 }}>
+          Stay updated with the latest stories from around the world
+        </p>
+      </div>
+
+      {/* Articles Grid */}
       <InfiniteScroll
         dataLength={articles.length}
         next={fetchMoreData}
-        hasMore={totalResults != articles.length}
-        loader={<Spinner></Spinner>}
-      ><div className="container my-3">
-          <div className="row" >
+        hasMore={totalResults !== articles.length}
+        loader={<Spinner />}
+        style={{ overflow: 'visible' }}
+      >
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gap: '1.5rem'
+          }}>
             {articles.map((article) =>
-              <div className="col-md-4" key={article.url} >
-                <NewsItem title={article.title} description={article.description} imageUrl={article.urlToImage} newsUrl={article.url} author={article.author ? article.author : "Staff"} date={article.publishedAt} source={article.source.name} />
-              </div>)
-            }
+              <NewsItem
+                key={article.url}
+                title={article.title}
+                description={article.description}
+                imageUrl={article.urlToImage}
+                newsUrl={article.url}
+                author={article.author || 'Staff'}
+                date={article.publishedAt}
+                source={article.source.name}
+              />
+            )}
           </div>
         </div>
       </InfiniteScroll>
-      {/* } */}
     </>
   )
 }
