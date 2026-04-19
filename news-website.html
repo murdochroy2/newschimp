@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Meridian — World News</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0e0e;
+    --paper: #f5f0e8;
+    --paper-dark: #ede7d9;
+    --accent: #c0392b;
+    --accent-dark: #96281b;
+    --muted: #6b6358;
+    --border: rgba(14,14,14,0.12);
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── TICKER ── */
+  .ticker-bar {
+    background: var(--ink);
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 6px 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  .ticker-label {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    padding: 2px 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-right: 16px;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 48px;
+    animation: tickerScroll 30s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-track span { opacity: 0.8; }
+  .ticker-track span::before { content: '◆ '; color: var(--accent); font-size: 8px; vertical-align: middle; margin-right: 6px; }
+  @keyframes tickerScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    border-bottom: 2px solid var(--ink);
+    padding: 0 40px;
+  }
+  .masthead-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .masthead-meta {
+    font-size: 11.5px;
+    color: var(--muted);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+  .logo {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+  .masthead-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn-subscribe {
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 8px 20px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: background 0.2s;
+  }
+  .btn-subscribe:hover { background: var(--accent); }
+  .btn-search {
+    background: none;
+    border: 1.5px solid var(--ink);
+    font-family: var(--sans);
+    font-size: 12.5px;
+    padding: 7px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+  }
+  .btn-search:hover { background: var(--paper-dark); }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    gap: 0;
+    padding: 0;
+    overflow-x: auto;
+  }
+  nav a {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 13px 20px 12px;
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+    position: relative;
+  }
+  nav a:first-child { border-left: 1px solid var(--border); }
+  nav a:hover, nav a.active { color: var(--accent); background: rgba(192,57,43,0.06); }
+  nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2.5px;
+    background: var(--accent);
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+  .page-body { display: grid; grid-template-columns: 1fr 320px; gap: 48px; padding: 48px 0 80px; }
+
+  /* ── HERO GRID ── */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-main {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    background: var(--paper);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-main img, .story-img { width: 100%; display: block; object-fit: cover; }
+  .hero-main-img { height: 380px; }
+  .hero-main-body { padding: 28px 28px 32px; }
+  .hero-sub1, .hero-sub2 {
+    background: var(--paper);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .hero-sub1 { border-bottom: 1px solid var(--border); }
+  .hero-sub1 img { height: 160px; }
+  .hero-sub2 img { height: 160px; }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .headline-xl {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3vw, 38px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .headline-xl:hover { color: var(--accent-dark); cursor: pointer; }
+
+  .headline-lg {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .headline-lg:hover { color: var(--accent-dark); }
+
+  .headline-md {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 6px;
+    cursor: pointer;
+  }
+  .headline-md:hover { color: var(--accent-dark); }
+
+  .standfirst {
+    font-size: 14.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .byline {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    margin-top: auto;
+  }
+  .byline strong { color: var(--ink); font-weight: 400; }
+
+  /* ── SECTION DIVIDER ── */
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .section-head h2 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  .section-head-line {
+    flex: 1;
+    height: 1.5px;
+    background: var(--ink);
+    opacity: 0.15;
+  }
+  .section-head-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── LIST STORIES ── */
+  .stories-list { display: flex; flex-direction: column; gap: 0; }
+  .story-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .story-row:first-child { border-top: 1px solid var(--border); }
+  .story-row-img { height: 90px; object-fit: cover; width: 100%; display: block; }
+  .story-row-body { display: flex; flex-direction: column; gap: 6px; }
+
+  /* ── OPINION ── */
+  .opinion-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 48px; }
+  .opinion-card {
+    background: var(--paper-dark);
+    border: 1px solid var(--border);
+    padding: 24px;
+    position: relative;
+  }
+  .opinion-card::before {
+    content: '\201C';
+    font-family: var(--serif);
+    font-size: 72px;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.35;
+    position: absolute;
+    top: 12px; left: 18px;
+  }
+  .opinion-card-body { padding-top: 28px; }
+  .author-line { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+  .author-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .av-red  { background: #c0392b; }
+  .av-blue { background: #1a5276; }
+  .author-name { font-size: 13px; font-weight: 500; }
+  .author-role { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+
+  /* ── SIDEBAR ── */
+  .sidebar { border-left: 1px solid var(--border); padding-left: 36px; }
+
+  /* weather widget */
+  .weather-box {
+    background: var(--ink);
+    color: #fff;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  .weather-loc { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
+  .weather-temp { font-family: var(--serif); font-size: 52px; font-weight: 400; line-height: 1; }
+  .weather-temp sup { font-size: 22px; vertical-align: super; }
+  .weather-desc { font-size: 14px; opacity: 0.7; margin-top: 4px; }
+  .weather-row { display: flex; justify-content: space-between; margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 14px; font-size: 12px; opacity: 0.65; font-family: var(--mono); }
+
+  /* markets */
+  .markets-box { margin-bottom: 32px; }
+  .market-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .market-name { font-weight: 500; }
+  .market-val { font-family: var(--mono); font-size: 12.5px; }
+  .up { color: #1e8449; }
+  .dn { color: var(--accent); }
+
+  /* most read */
+  .most-read-list { list-style: none; }
+  .most-read-list li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .most-read-list li:first-child { border-top: 1px solid var(--border); }
+  .read-num {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--paper-dark);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 36px;
+    -webkit-text-stroke: 1.5px var(--ink);
+  }
+  .read-title { font-size: 14px; font-weight: 500; line-height: 1.3; }
+  .read-title:hover { color: var(--accent); }
+
+  /* newsletter */
+  .newsletter-box {
+    border: 2px solid var(--ink);
+    padding: 28px 24px;
+    margin-bottom: 32px;
+  }
+  .newsletter-box h3 { font-family: var(--serif); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .newsletter-box p { font-size: 13.5px; color: var(--muted); margin-bottom: 16px; }
+  .newsletter-box input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    padding: 10px 14px;
+    font-family: var(--sans);
+    font-size: 14px;
+    background: transparent;
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .newsletter-box input:focus { border-color: var(--ink); }
+  .newsletter-box button {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 11px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .newsletter-box button:hover { background: var(--accent-dark); }
+
+  /* ── WORLD / TOPIC GRID ── */
+  .topic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
+  .topic-card {
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .topic-card:hover { box-shadow: 4px 4px 0 var(--ink); }
+  .topic-card img { height: 160px; width: 100%; object-fit: cover; display: block; }
+  .topic-card-body { padding: 16px; }
+
+  /* ── VIDEO STRIP ── */
+  .video-strip { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 48px; }
+  .video-thumb {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .video-thumb img { width: 100%; height: 110px; object-fit: cover; display: block; }
+  .video-thumb::after {
+    content: '▶';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 36px; height: 36px;
+    background: rgba(192,57,43,0.9);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    border-radius: 50%;
+  }
+  .video-title { font-size: 13px; font-weight: 500; padding: 10px 0 4px; line-height: 1.3; }
+  .video-dur { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.75);
+    padding: 60px 0 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 32px;
+  }
+  .footer-brand .logo { color: #fff; font-size: 36px; }
+  .footer-brand p { font-size: 13px; margin-top: 14px; line-height: 1.6; }
+  .footer-col h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 16px;
+  }
+  .footer-col a {
+    display: block;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 13.5px;
+    margin-bottom: 10px;
+    transition: color 0.15s;
+  }
+  .footer-col a:hover { color: #fff; }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+  }
+  .footer-bottom a { color: rgba(255,255,255,0.45); text-decoration: none; margin-left: 20px; }
+
+  /* ── PLACEHOLDER IMAGES (SVG data URIs) ── */
+  /* We use colored divs instead of real images for the demo */
+  .img-placeholder {
+    background: linear-gradient(135deg, #c8bfa8 0%, #a89880 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(0,0,0,0.35);
+    letter-spacing: 0.05em;
+  }
+
+  /* animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-grid { animation: fadeUp 0.6s ease both; }
+  .page-body { animation: fadeUp 0.7s 0.1s ease both; }
+</style>
+</head>
+<body>
+
+<!-- BREAKING TICKER -->
+<div class="ticker-bar">
+  <span class="ticker-label">Breaking</span>
+  <div style="overflow:hidden;flex:1">
+    <div class="ticker-track">
+      <span>G20 Finance Ministers Reach Historic Climate Debt Agreement</span>
+      <span>WHO Declares End to Three-Year Health Emergency in Southeast Asia</span>
+      <span>Fed Holds Rates Steady Amid Mixed Economic Signals</span>
+      <span>Tech Giants Face New EU Antitrust Scrutiny Over AI Partnerships</span>
+      <span>UNSC Votes on Expanded Peacekeeping Mission in West Africa</span>
+      <span>Olympic Committee Announces 2034 Winter Games Host City</span>
+      <!-- duplicate for seamless loop -->
+      <span>G20 Finance Ministers Reach Historic Climate Debt Agreement</span>
+      <span>WHO Declares End to Three-Year Health Emergency in Southeast Asia</span>
+      <span>Fed Holds Rates Steady Amid Mixed Economic Signals</span>
+      <span>Tech Giants Face New EU Antitrust Scrutiny Over AI Partnerships</span>
+      <span>UNSC Votes on Expanded Peacekeeping Mission in West Africa</span>
+      <span>Olympic Committee Announces 2034 Winter Games Host City</span>
+    </div>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-top">
+    <span class="masthead-meta">Sunday, April 19, 2026 · Est. 1897</span>
+    <a href="#" class="logo">The <span>M</span>eridian</a>
+    <div class="masthead-actions">
+      <button class="btn-search">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6.5" cy="6.5" r="5.5"/><line x1="10.5" y1="10.5" x2="15" y2="15"/></svg>
+        Search
+      </button>
+      <button class="btn-subscribe">Subscribe</button>
+    </div>
+  </div>
+  <nav>
+    <a href="#" class="active">World</a>
+    <a href="#">Politics</a>
+    <a href="#">Business</a>
+    <a href="#">Technology</a>
+    <a href="#">Science</a>
+    <a href="#">Culture</a>
+    <a href="#">Opinion</a>
+    <a href="#">Climate</a>
+    <a href="#">Sport</a>
+    <a href="#">Video</a>
+  </nav>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- HERO GRID -->
+  <div class="hero-grid">
+    <!-- Main lead story -->
+    <div class="hero-main">
+      <div class="img-placeholder hero-main-img" style="background:linear-gradient(120deg,#2c3e50,#4a6741);">
+        <span style="color:rgba(255,255,255,0.2);font-size:13px;">WORLD · DIPLOMACY</span>
+      </div>
+      <div class="hero-main-body">
+        <span class="section-tag">World · Exclusive</span>
+        <h1 class="headline-xl">G20 Nations Agree on Landmark Framework to Restructure Climate Debt for Developing Economies</h1>
+        <p class="standfirst">The agreement, brokered after seventy hours of closed-door negotiations in Geneva, would cancel or defer up to $400 billion in sovereign debt contingent on measurable emissions reductions and biodiversity targets.</p>
+        <p class="byline" style="margin-top:16px;"><strong>By Priya Menon</strong> · World Affairs Editor · 2 hours ago</p>
+      </div>
+    </div>
+
+    <!-- Sub story 1 -->
+    <div class="hero-sub1">
+      <div class="img-placeholder story-img" style="height:160px;background:linear-gradient(135deg,#5d4037,#8d6e63);">
+        <span style="color:rgba(255,255,255,0.2);font-size:11px;">POLITICS</span>
+      </div>
+      <span class="section-tag">US Politics</span>
+      <h2 class="headline-lg">Senate Passes Infrastructure Overhaul After Months of Bipartisan Deadlock</h2>
+      <p class="standfirst" style="font-size:13px;">The bill, backed by 67 senators, allocates $890 billion toward bridges, rail, and digital infrastructure across all 50 states.</p>
+      <p class="byline"><strong>Marcus Webb</strong> · Washington · 4 hours ago</p>
+    </div>
+
+    <!-- Sub story 2 -->
+    <div class="hero-sub2">
+      <div class="img-placeholder story-img" style="height:160px;background:linear-gradient(135deg,#1a237e,#283593);">
+        <span style="color:rgba(255,255,255,0.2);font-size:11px;">SCIENCE</span>
+      </div>
+      <span class="section-tag">Science</span>
+      <h2 class="headline-lg">Researchers Announce First Successful Room-Temperature Superconductor Replicated in Three Independent Labs</h2>
+      <p class="byline"><strong>Dr. Leila Osei</strong> · Science Desk · 6 hours ago</p>
+    </div>
+  </div>
+
+  <!-- TWO-COLUMN BODY -->
+  <div class="page-body">
+
+    <!-- MAIN COLUMN -->
+    <main>
+
+      <!-- MORE STORIES -->
+      <div class="section-head">
+        <h2>Latest News</h2>
+        <div class="section-head-line"></div>
+        <span class="section-head-tag">Updated hourly</span>
+      </div>
+
+      <div class="stories-list">
+
+        <div class="story-row">
+          <div class="img-placeholder story-row-img" style="background:linear-gradient(135deg,#004d40,#00796b);">
+            <span style="color:rgba(255,255,255,0.25);font-size:10px;">CLIMATE</span>
+          </div>
+          <div class="story-row-body">
+            <span class="section-tag">Climate</span>
+            <h3 class="headline-md">Arctic Ice Sheet Records Smallest Summer Extent Since Modern Measurements Began</h3>
+            <p class="standfirst" style="font-size:13px;">Scientists warn the accelerating melt could disrupt Atlantic circulation patterns within the decade, affecting monsoons across three continents.</p>
+            <p class="byline"><strong>Amara Diallo</strong> · Environment · 1 hour ago</p>
+          </div>
+        </div>
+
+        <div class="story-row">
+          <div class="img-placeholder story-row-img" style="background:linear-gradient(135deg,#311b92,#4527a0);">
+            <span style="color:rgba(255,255,255,0.25);font-size:10px;">TECH</span>
+          </div>
+          <div class="story-row-body">
+            <span class="section-tag">Technology</span>
+            <h3 class="headline-md">EU Regulators Open Formal Investigation Into Three AI Firms Over Algorithmic Transparency Rules</h3>
+            <p class="standfirst" style="font-size:13px;">Brussels takes aim at the so-called "black box" problem as regulators demand model audits under the AI Act's highest-risk provisions.</p>
+            <p class="byline"><strong>Sofia Andersson</strong> · Brussels Bureau · 3 hours ago</p>
+          </div>
+        </div>
+
+        <div class="story-row">
+          <div class="img-placeholder story-row-img" style="background:linear-gradient(135deg,#bf360c,#e64a19);">
+            <span style="color:rgba(255,255,255,0.25);font-size:10px;">CONFLICT</span>
+          </div>
+          <div class="story-row-body">
+            <span class="section-tag">World</span>
+            <h3 class="headline-md">UN Mediators Report Fragile Ceasefire Holding in Eastern Sudan After Coalition Talks</h3>
+            <p class="byline"><strong>James Okafor</strong> · Nairobi · 5 hours ago</p>
+          </div>
+        </div>
+
+        <div class="story-row">
+          <div class="img-placeholder story-row-img" style="background:linear-gradient(135deg,#006064,#00838f);">
+            <span style="color:rgba(255,255,255,0.25);font-size:10px;">ECONOMY</span>
+          </div>
+          <div class="story-row-body">
+            <span class="section-tag">Business</span>
+            <h3 class="headline-md">IMF Revises Global Growth Forecast Upward as Emerging Markets Outperform Expectations</h3>
+            <p class="standfirst" style="font-size:13px;">The fund now projects 3.4% global growth for 2026, citing resilient consumer demand in South Asia and sub-Saharan Africa.</p>
+            <p class="byline"><strong>Ren Yiqun</strong> · Economics · 7 hours ago</p>
+          </div>
+        </div>
+
+        <div class="story-row">
+          <div class="img-placeholder story-row-img" style="background:linear-gradient(135deg,#4a148c,#6a1b9a);">
+            <span style="color:rgba(255,255,255,0.25);font-size:10px;">CULTURE</span>
+          </div>
+          <div class="story-row-body">
+            <span class="section-tag">Culture</span>
+            <h3 class="headline-md">Cannes Announces Surprise Retrospective of Latin American Cinema's New Wave</h3>
+            <p class="byline"><strong>Isabelle Fontaine</strong> · Arts & Culture · 9 hours ago</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- OPINION -->
+      <div class="section-head" style="margin-top:48px;">
+        <h2>Opinion</h2>
+        <div class="section-head-line"></div>
+      </div>
+
+      <div class="opinion-cards">
+        <div class="opinion-card">
+          <div class="opinion-card-body">
+            <p style="font-family:var(--serif);font-size:16px;font-style:italic;line-height:1.5;font-weight:400;">The debt-for-climate swap is not charity. It is the most pragmatic deal rich nations have ever been offered.</p>
+            <div class="author-line">
+              <div class="author-avatar av-red">NK</div>
+              <div>
+                <div class="author-name">Nadia Kashmiri</div>
+                <div class="author-role">Senior Columnist</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="opinion-card">
+          <div class="opinion-card-body">
+            <p style="font-family:var(--serif);font-size:16px;font-style:italic;line-height:1.5;font-weight:400;">Room-temperature superconductivity could reshape civilization — if we survive the energy politics that follow.</p>
+            <div class="author-line">
+              <div class="author-avatar av-blue">TP</div>
+              <div>
+                <div class="author-name">Thomas Pryce</div>
+                <div class="author-role">Science Editor</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORLD IN FOCUS -->
+      <div class="section-head">
+        <h2>World in Focus</h2>
+        <div class="section-head-line"></div>
+      </div>
+
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="img-placeholder" style="height:160px;background:linear-gradient(135deg,#1b5e20,#2e7d32);">
+            <span style="color:rgba(255,255,255,0.2);font-size:10px;">ASIA-PACIFIC</span>
+          </div>
+          <div class="topic-card-body">
+            <span class="section-tag">Asia-Pacific</span>
+            <h3 class="headline-md">India Launches Largest Renewable Grid Expansion in History</h3>
+            <p class="byline" style="margin-top:8px;">Ananya Iyer · 11 hrs ago</p>
+          </div>
+        </div>
+        <div class="topic-card">
+          <div class="img-placeholder" style="height:160px;background:linear-gradient(135deg,#0d47a1,#1565c0);">
+            <span style="color:rgba(255,255,255,0.2);font-size:10px;">EUROPE</span>
+          </div>
+          <div class="topic-card-body">
+            <span class="section-tag">Europe</span>
+            <h3 class="headline-md">France and Germany Propose Joint Defence Procurement Agency</h3>
+            <p class="byline" style="margin-top:8px;">Elise Morin · 8 hrs ago</p>
+          </div>
+        </div>
+        <div class="topic-card">
+          <div class="img-placeholder" style="height:160px;background:linear-gradient(135deg,#b71c1c,#c62828);">
+            <span style="color:rgba(255,255,255,0.2);font-size:10px;">AMERICAS</span>
+          </div>
+          <div class="topic-card-body">
+            <span class="section-tag">Americas</span>
+            <h3 class="headline-md">Brazil's Amazon Deforestation Falls to Lowest Level in 20 Years</h3>
+            <p class="byline" style="margin-top:8px;">Carlos Mendez · 13 hrs ago</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEO -->
+      <div class="section-head">
+        <h2>Video</h2>
+        <div class="section-head-line"></div>
+      </div>
+      <div class="video-strip">
+        <div class="video-thumb">
+          <div class="img-placeholder" style="height:110px;background:linear-gradient(135deg,#263238,#37474f);"></div>
+          <p class="video-title">Inside Geneva: The final hours of the climate debt talks</p>
+          <p class="video-dur">8:42</p>
+        </div>
+        <div class="video-thumb">
+          <div class="img-placeholder" style="height:110px;background:linear-gradient(135deg,#3e2723,#4e342e);"></div>
+          <p class="video-title">Superconductor explained in 90 seconds</p>
+          <p class="video-dur">1:32</p>
+        </div>
+        <div class="video-thumb">
+          <div class="img-placeholder" style="height:110px;background:linear-gradient(135deg,#1a237e,#283593);"></div>
+          <p class="video-title">Arctic melt — drone footage from the ice shelf</p>
+          <p class="video-dur">4:17</p>
+        </div>
+        <div class="video-thumb">
+          <div class="img-placeholder" style="height:110px;background:linear-gradient(135deg,#004d40,#00695c);"></div>
+          <p class="video-title">Interview: The IMF chief on growth prospects</p>
+          <p class="video-dur">12:05</p>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- Weather -->
+      <div class="weather-box">
+        <p class="weather-loc">📍 Kolkata, IN</p>
+        <div class="weather-temp">34<sup>°C</sup></div>
+        <p class="weather-desc">Partly cloudy · Humid</p>
+        <div class="weather-row">
+          <span>Humidity 72%</span>
+          <span>Wind 14 km/h</span>
+          <span>UV High</span>
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="newsletter-box">
+        <h3>Morning Briefing</h3>
+        <p>The six stories that matter, before 7 a.m. — in your inbox, every weekday.</p>
+        <input type="email" placeholder="your@email.com">
+        <button>Subscribe — it's free</button>
+      </div>
+
+      <!-- Markets -->
+      <div class="markets-box">
+        <div class="section-head" style="margin-bottom:16px;">
+          <h2 style="font-size:17px;">Markets</h2>
+          <div class="section-head-line"></div>
+          <span class="section-head-tag" style="font-size:10px;">Live</span>
+        </div>
+        <div class="market-row"><span class="market-name">S&P 500</span><span class="market-val up">5,312 ▲ 0.42%</span></div>
+        <div class="market-row"><span class="market-name">NASDAQ</span><span class="market-val up">18,740 ▲ 0.67%</span></div>
+        <div class="market-row"><span class="market-name">FTSE 100</span><span class="market-val dn">7,890 ▼ 0.19%</span></div>
+        <div class="market-row"><span class="market-name">Nikkei 225</span><span class="market-val up">39,450 ▲ 1.12%</span></div>
+        <div class="market-row"><span class="market-name">Brent Crude</span><span class="market-val dn">$74.30 ▼ 0.55%</span></div>
+        <div class="market-row"><span class="market-name">Gold</span><span class="market-val up">$3,287 ▲ 0.88%</span></div>
+      </div>
+
+      <!-- Most Read -->
+      <div class="section-head">
+        <h2 style="font-size:17px;">Most Read</h2>
+        <div class="section-head-line"></div>
+      </div>
+      <ul class="most-read-list">
+        <li>
+          <span class="read-num">1</span>
+          <p class="read-title">G20 Nations Agree on Landmark Climate Debt Framework</p>
+        </li>
+        <li>
+          <span class="read-num">2</span>
+          <p class="read-title">Room-Temperature Superconductor Confirmed by Three Independent Labs</p>
+        </li>
+        <li>
+          <span class="read-num">3</span>
+          <p class="read-title">Senate Infrastructure Bill Passes with Bipartisan Support</p>
+        </li>
+        <li>
+          <span class="read-num">4</span>
+          <p class="read-title">Arctic Ice Hits Record Summer Low Since Modern Tracking</p>
+        </li>
+        <li>
+          <span class="read-num">5</span>
+          <p class="read-title">Brazil's Amazon Deforestation Falls to 20-Year Low</p>
+        </li>
+      </ul>
+
+    </aside>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo" style="color:#fff;">The <span style="color:var(--accent)">M</span>eridian</a>
+        <p>Independent journalism since 1897. Award-winning coverage of world affairs, politics, culture, science, and business — without fear or favour.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Sections</h4>
+        <a href="#">World</a>
+        <a href="#">Politics</a>
+        <a href="#">Business</a>
+        <a href="#">Technology</a>
+        <a href="#">Climate</a>
+        <a href="#">Culture</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Advertise</a>
+        <a href="#">Press Office</a>
+        <a href="#">Ethics Policy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="#">Subscribe</a>
+        <a href="#">Apps</a>
+        <a href="#">Newsletters</a>
+        <a href="#">Podcasts</a>
+        <a href="#">Archive</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 The Meridian Publishing Group. All rights reserved.</span>
+      <div>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+        <a href="#">Accessibility</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

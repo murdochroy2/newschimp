@@ -13,7 +13,7 @@ export const App = () => {
     <div style={{ minHeight: '100vh', backgroundColor: '#0f172a' }}>
       {/* <Router> Router component already present in index.js */}
         <Navbar />
-        <LoadingBar height={3} color="#6366f1" progress={progress} /><div>
+        <LoadingBar height={3} color="#c0392b" progress={progress} /><div>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Routes>
