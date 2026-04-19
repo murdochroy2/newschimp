@@ -85,6 +85,9 @@ const News = (props) => {
   const [pageSize, setPageSize] = useState(20)
   // document.title = `NewsChimp | ${capitalizeFirstLetter(props.category)}`
   const NEWSAPI_URL = process.env.REACT_APP_NEWSAPI_URL
+  const API_KEY = process.env.REACT_APP_API_KEY
+  const isLocal = process.env.NODE_ENV === 'development'
+  const apiKeyParam = isLocal && API_KEY ? `&apiKey=${API_KEY}` : ''
   const componentDidMount = async () => {
     // setLoading(true)
     // let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=` + page + "&pageSize=" + pageSize
@@ -123,7 +126,7 @@ const News = (props) => {
   const updateNews = async () => {
     props.setProgress(10)
     setLoading(true)
-    let url = `${NEWSAPI_URL}/v2/top-headlines?country=${props.country}&category=${props.category}&page=` + page + "&pageSize=" + pageSize
+    let url = `${NEWSAPI_URL}/v2/top-headlines?country=${props.country}&category=${props.category}&page=` + page + "&pageSize=" + pageSize + apiKeyParam
     props.setProgress(30)
     let data = await fetch(url)
     props.setProgress(70)
@@ -142,7 +145,7 @@ const News = (props) => {
     let newPage = page + 1
     console.log("page: ", newPage, "fetching more data")
 
-    let url = `${NEWSAPI_URL}/v2/top-headlines?country=${props.country}&category=${props.category}&page=` + newPage + "&pageSize=" + pageSize
+    let url = `${NEWSAPI_URL}/v2/top-headlines?country=${props.country}&category=${props.category}&page=` + newPage + "&pageSize=" + pageSize + apiKeyParam
     setPage(newPage)
     let data = await fetch(url)
     let parsedData = await data.json()
@@ -180,7 +183,7 @@ const News = (props) => {
       <InfiniteScroll
         dataLength={articles.length}
         next={fetchMoreData}
-        hasMore={totalResults !== articles.length}
+        hasMore={page * pageSize < totalResults}
         loader={<Spinner />}
         style={{ overflow: 'visible' }}
       >
