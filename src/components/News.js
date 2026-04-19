@@ -21,6 +21,8 @@ const News = (props) => {
   const [totalResults, setTotalResults] = useState(0)
   const pageSize = 20
   const NEWSAPI_URL = process.env.REACT_APP_NEWSAPI_URL
+  const API_KEY = process.env.REACT_APP_API_KEY
+  const apiKeyParam = process.env.NODE_ENV === 'development' && API_KEY ? `&apiKey=${API_KEY}` : ''
 
   useEffect(() => { updateNews() }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -28,7 +30,7 @@ const News = (props) => {
     props.setProgress(10)
     setLoading(true)
     try {
-      const url = `${NEWSAPI_URL}/v2/top-headlines?country=${props.country}&category=${props.category}&page=1&pageSize=${pageSize}`
+      const url = `${NEWSAPI_URL}/v2/top-headlines?country=${props.country}&category=${props.category}&page=1&pageSize=${pageSize}${apiKeyParam}`
       props.setProgress(30)
       const data = await fetch(url)
       props.setProgress(70)
@@ -44,7 +46,7 @@ const News = (props) => {
   const fetchMoreData = async () => {
     const newPage = page + 1
     setPage(newPage)
-    const url = `${NEWSAPI_URL}/v2/top-headlines?country=${props.country}&category=${props.category}&page=${newPage}&pageSize=${pageSize}`
+    const url = `${NEWSAPI_URL}/v2/top-headlines?country=${props.country}&category=${props.category}&page=${newPage}&pageSize=${pageSize}${apiKeyParam}`
     const data = await fetch(url)
     const parsed = await data.json()
     setArticles(prev => prev.concat(parsed.articles || []))
@@ -125,7 +127,7 @@ const News = (props) => {
             <InfiniteScroll
               dataLength={articles.length}
               next={fetchMoreData}
-              hasMore={totalResults !== articles.length}
+              hasMore={page * pageSize < totalResults}
               loader={<Spinner />}
               style={{ overflow: 'visible' }}
             >

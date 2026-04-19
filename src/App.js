@@ -1,5 +1,3 @@
-import './App.css';
-
 import React, { useState } from 'react'
 import Navbar from './components/Navbar';
 import News from './components/News';
@@ -10,7 +8,7 @@ export const App = () => {
   const [progress, setProgress] = useState(0)
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0f172a' }}>
+    <div>
       {/* <Router> Router component already present in index.js */}
         <Navbar />
         <LoadingBar height={3} color="#c0392b" progress={progress} /><div>

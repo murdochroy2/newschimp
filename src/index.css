@@ -1,5 +1,6 @@
 /* ── NEWSPAPER THEME ── */
 :root {
+  color-scheme: light;
   --ink: #0e0e0e;
   --paper: #f5f0e8;
   --paper-dark: #ede7d9;
@@ -405,51 +406,6 @@ body {
 @media (max-width: 480px) {
   .nc-topic-grid { grid-template-columns: 1fr; }
   .nc-story-row { grid-template-columns: 90px 1fr; gap: 12px; }
-}
-
-
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #0f172a;
-  color: #e2e8f0;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #1e293b;
-}
-::-webkit-scrollbar-thumb {
-  background: #6366f1;
-  border-radius: 3px;
-}
-
-/* Card hover animation */
-.news-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.news-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
-}
-
-/* Loading bar override */
-#nprogress .bar {
-  background: #6366f1 !important;
 }
 
 /* Line clamp utilities */
