@@ -80,7 +80,9 @@ const News = (props) => {
               />
               <div className="nc-hero-main-body">
                 <span className="nc-cat-tag">{heroMain.source?.name || cap(props.category)} · Exclusive</span>
-                <h1 className="nc-headline-xl">{heroMain.title}</h1>
+                <a href={heroMain.url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <h1 className="nc-headline-xl">{heroMain.title}</h1>
+                </a>
                 {heroMain.description && <p className="nc-standfirst">{heroMain.description}</p>}
                 <p className="nc-byline" style={{ marginTop: '16px' }}>
                   <strong>{heroMain.author || 'Staff Reporter'}</strong> · {fmtDate(heroMain.publishedAt)}
@@ -100,7 +102,9 @@ const News = (props) => {
                     className="nc-hero-sub-img"
                   />
                   <span className="nc-cat-tag">{article.source?.name}</span>
-                  <h2 className="nc-headline-lg">{article.title}</h2>
+                  <a href={article.url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <h2 className="nc-headline-lg">{article.title}</h2>
+                  </a>
                   {article.description && <p className="nc-standfirst" style={{ fontSize: '13px' }}>{article.description}</p>}
                   <p className="nc-byline">
                     <strong>{article.author || 'Staff'}</strong> · {fmtDateShort(article.publishedAt)}
