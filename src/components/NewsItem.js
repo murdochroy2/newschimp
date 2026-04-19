@@ -23,7 +23,7 @@ export const NewsItem = ({ article }) => {
           <h3 className="nc-headline-md">{title}</h3>
         </a>
         {description && (
-          <p className="nc-standfirst line-clamp-2" style={{ fontSize: '13px' }}>{description}</p>
+          <p className="nc-standfirst line-clamp-2">{description}</p>
         )}
         <p className="nc-byline"><strong>{author || 'Staff'}</strong> · {formattedDate}</p>
       </div>
