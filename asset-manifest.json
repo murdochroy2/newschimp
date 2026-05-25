@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/newschimp/static/css/main.7b84f1d1.css",
-    "main.js": "/newschimp/static/js/main.8fcbf04b.js",
-    "static/js/787.3c8a8c00.chunk.js": "/newschimp/static/js/787.3c8a8c00.chunk.js",
-    "index.html": "/newschimp/index.html",
-    "main.7b84f1d1.css.map": "/newschimp/static/css/main.7b84f1d1.css.map",
-    "main.8fcbf04b.js.map": "/newschimp/static/js/main.8fcbf04b.js.map",
-    "787.3c8a8c00.chunk.js.map": "/newschimp/static/js/787.3c8a8c00.chunk.js.map"
+    "main.css": "/static/css/main.7b84f1d1.css",
+    "main.js": "/static/js/main.1d1a4445.js",
+    "static/js/787.3c8a8c00.chunk.js": "/static/js/787.3c8a8c00.chunk.js",
+    "index.html": "/index.html",
+    "main.7b84f1d1.css.map": "/static/css/main.7b84f1d1.css.map",
+    "main.1d1a4445.js.map": "/static/js/main.1d1a4445.js.map",
+    "787.3c8a8c00.chunk.js.map": "/static/js/787.3c8a8c00.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7b84f1d1.css",
-    "static/js/main.8fcbf04b.js"
+    "static/js/main.1d1a4445.js"
   ]
 }
