@@ -1,69 +1,72 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { SITE_NAME_START, SITE_NAME_END } from '../config'
+
+const categories = [
+  { label: 'Home', path: '/' },
+  { label: 'Business', path: '/business' },
+  { label: 'Entertainment', path: '/entertainment' },
+  { label: 'General', path: '/general' },
+  { label: 'Health', path: '/health' },
+  { label: 'Science', path: '/science' },
+  { label: 'Sports', path: '/sports' },
+  { label: 'Technology', path: '/technology' },
+]
+
+const BREAKING = [
+  'G20 Nations Agree on Landmark Climate Debt Framework',
+  'Tech Giants Face New EU Antitrust Scrutiny Over AI Partnerships',
+  'Fed Holds Rates Steady Amid Mixed Economic Signals',
+  'UN Peacekeeping Mission Expanded in West Africa',
+  'Scientists Announce Breakthrough in Renewable Energy Storage',
+  'Global Markets Rally on Positive Trade Data',
+  'WHO Reports Decline in Infectious Disease Outbreaks Globally',
+  'Olympic Committee Announces 2034 Winter Games Host City',
+]
 
 export const Navbar = () => {
+  const location = useLocation()
+  const date = new Date().toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  })
+
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top" data-bs-theme="dark">
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/">NewsChimp</Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/">Home</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/business">Business</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/entertainment">Entertainment</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/general">General</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/health">Health</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/science">Science</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/sports">Sports</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/technology">Technology</Link>
-            </li>
-
-            {/* Dropdown */}
-            {/* <li className="nav-item dropdown">
-                <Link className="nav-link dropdown-toggle" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
-                </Link>
-                <ul className="dropdown-menu">
-                  <li><Link className="dropdown-item" to="/">Action</Link></li>
-                  <li><Link className="dropdown-item" to="/">Another action</Link></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><Link className="dropdown-item" to="/">Something else here</Link></li>
-                </ul>
-              </li> */}
-
-            {/* Disabled Button */}
-            {/* <li className="nav-item">
-                <Link className="nav-link disabled" aria-disabled="true">Disabled</Link>
-              </li> */}
-          </ul>
-
-          {/* Search Box */}
-          {/* <form className="d-flex" role="search">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit">Search</button>
-            </form> */}
-
+    <header>
+      {/* Breaking Ticker */}
+      <div className="nc-ticker">
+        <span className="nc-ticker-label">Breaking</span>
+        <div className="nc-ticker-overflow">
+          <div className="nc-ticker-track">
+            {[...BREAKING, ...BREAKING].map((h, i) => <span key={i}>{h}</span>)}
+          </div>
         </div>
       </div>
-    </nav>
+
+      {/* Masthead */}
+      <div className="nc-masthead">
+        <div className="nc-masthead-top">
+          <span className="nc-meta">{date} · Est. 2023</span>
+          <Link to="/" className="nc-logo">{SITE_NAME_START}<span>{SITE_NAME_END}</span></Link>
+          <div className="nc-masthead-actions">
+            <button className="nc-btn-search">&#128269; Search</button>
+            <button className="nc-btn-subscribe">Subscribe</button>
+          </div>
+        </div>
+
+        {/* Nav */}
+        <nav className="nc-nav">
+          {categories.map(cat => (
+            <Link
+              key={cat.path}
+              to={cat.path}
+              className={`nc-nav-link${location.pathname === cat.path ? ' active' : ''}`}
+            >
+              {cat.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </header>
   )
 }
 export default Navbar

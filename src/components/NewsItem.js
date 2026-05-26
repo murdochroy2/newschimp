@@ -1,24 +1,31 @@
-import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import React from 'react'
 
-export const NewsItem = (props) => {
-  let { title, description, imageUrl, newsUrl, author, date, source } = props;
-  let altImageUrl = "https://a57.foxsports.com/statics.foxsports.com/www.foxsports.com/content/uploads/2023/08/1408/814/07.31.23_NFL-Odds-History_16x9.jpg?ve=1&tl=1";
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&auto=format&fit=crop&q=60'
+
+export const NewsItem = ({ article }) => {
+  const { title, description, urlToImage, url, author, publishedAt, source } = article
+
+  const formattedDate = publishedAt ? new Date(publishedAt).toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric'
+  }) : ''
+
   return (
-    <div className='my-3'>
-      <div className="card">
-        <img src={imageUrl ? imageUrl : altImageUrl} className="card-img-top" alt="https://a57.foxsports.com/statics.foxsports.com/www.foxsports.com/content/uploads/2023/08/1408/814/07.31.23_NFL-Odds-History_16x9.jpg?ve=1&tl=1" />
-        <div className="card-body ">
-          <h5 className="card-title">{title}</h5>
-          <p className="card-text">{description}</p>
-          <p className="card-text"><small className="text-body-secondary">By {author} on {new Date(date).toUTCString()}</small></p>
-          <a href={newsUrl} target='_blank' rel="noreferrer" className="btn btn-primary">Read More</a>
-        </div>
-
-        <span className="position-absolute top-0 end-0 translate-middle-y badge rounded-pill bg-danger">
-          {source ? source : "HIndustan Time"}
-          <span className="visually-hidden">unread messages</span>
-        </span>
+    <div className="nc-story-row">
+      <img
+        src={urlToImage || FALLBACK_IMAGE}
+        onError={e => { e.target.src = FALLBACK_IMAGE }}
+        alt={title}
+        className="nc-story-row-img"
+      />
+      <div className="nc-story-row-body">
+        <span className="nc-cat-tag">{source?.name}</span>
+        <a href={url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <h3 className="nc-headline-md">{title}</h3>
+        </a>
+        {description && (
+          <p className="nc-standfirst line-clamp-2">{description}</p>
+        )}
+        <p className="nc-byline"><strong>{author || 'Staff'}</strong> · {formattedDate}</p>
       </div>
     </div>
   )

@@ -41,5 +41,11 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://murdochroy2.github.io/newschimp"
+  "homepage": "https://thedailypost.site",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.10",
+    "tailwindcss": "^4.2.2"
+  }
 }
