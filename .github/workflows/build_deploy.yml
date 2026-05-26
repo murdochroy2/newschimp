@@ -25,6 +25,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          REACT_APP_SITE_NAME: ${{ secrets.REACT_APP_SITE_NAME }}
+          REACT_APP_NEWSAPI_URL: ${{ secrets.REACT_APP_NEWSAPI_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build
