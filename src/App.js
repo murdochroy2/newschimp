@@ -1,16 +1,8 @@
-import logo from './logo.svg';
-import './App.css';
-
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import Navbar from './components/Navbar';
 import News from './components/News';
 import LoadingBar from 'react-top-loading-bar';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link
-} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 export const App = () => {
   const apiKey = process.env.REACT_APP_API_KEY_2
   const [progress, setProgress] = useState(0)
@@ -19,7 +11,7 @@ export const App = () => {
     <div>
       {/* <Router> Router component already present in index.js */}
         <Navbar />
-        <LoadingBar height={3} color="#f11946" progress={progress} /><div>
+        <LoadingBar height={3} color="#c0392b" progress={progress} /><div>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Routes>
