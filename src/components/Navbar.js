@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { SITE_NAME_START, SITE_NAME_END } from '../config'
 
 const categories = [
   { label: 'Home', path: '/' },
@@ -45,7 +46,7 @@ export const Navbar = () => {
       <div className="nc-masthead">
         <div className="nc-masthead-top">
           <span className="nc-meta">{date} · Est. 2023</span>
-          <Link to="/" className="nc-logo">News<span>Chimp</span></Link>
+          <Link to="/" className="nc-logo">{SITE_NAME_START}<span>{SITE_NAME_END}</span></Link>
           <div className="nc-masthead-actions">
             <button className="nc-btn-search">&#128269; Search</button>
             <button className="nc-btn-subscribe">Subscribe</button>

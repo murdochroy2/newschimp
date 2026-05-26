@@ -3,6 +3,7 @@ import NewsItem from './NewsItem'
 import Spinner from './Spinner'
 import PropTypes from 'prop-types'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { SITE_NAME, SITE_NAME_START, SITE_NAME_END } from '../config'
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&auto=format&fit=crop&q=60'
 const MARKETS = [
@@ -217,7 +218,7 @@ const News = (props) => {
         <div className="nc-container">
           <div className="nc-footer-grid">
             <div className="nc-footer-brand">
-              <a href="/" className="nc-logo" style={{ color: '#fff', textDecoration: 'none' }}>News<span>Chimp</span></a>
+              <a href="/" className="nc-logo" style={{ color: '#fff', textDecoration: 'none' }}>{SITE_NAME_START}<span>{SITE_NAME_END}</span></a>
               <p>Independent journalism you can trust. Award-winning coverage of world affairs, politics, culture, science, and business — without fear or favour.</p>
             </div>
             <div className="nc-footer-col">
@@ -240,7 +241,7 @@ const News = (props) => {
             </div>
           </div>
           <div className="nc-footer-bottom">
-            <span>© {new Date().getFullYear()} NewsChimp. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</span>
             <div>
               {['Privacy', 'Terms', 'Cookies', 'Accessibility'].map(s => (
                 <a key={s} href="/">{s}</a>
